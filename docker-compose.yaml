@@ -1,0 +1,49 @@
+version: '3'
+services:
+  # simple-ai-model-00:
+    # image: phi3.5-mini-instruct:0.1
+    # build: ./models/phi3.5-mini-instruct
+    # container_name: model-phi3.5-mini-instruct
+    # deploy:
+      # resources:
+        # reservations:
+          # devices:
+           # - driver: nvidia
+              # count: 1
+              # capabilities: [gpu]
+
+  simple-ai-model-01:
+    # image: qwen2-7b-instruct:0.1
+    build: ./models/qwen2-7b-instruct
+    container_name: model-qwen2-7b-instruct
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  
+  simple-ai-server:
+    build: ./server
+    container_name: simple-ai-server
+    links:
+      # - simple-ai-model-00
+      - simple-ai-model-01
+
+  simple-ai-chat-ui:
+    build: ./ui
+    container_name: simple-ai-chat-ui
+    ports:
+      - 8888:8888
+    links:
+      - simple-ai-server
+
+  simple-ai-telegram-bot:
+    build: ./telegram
+    container_name: simple-ai-telegram-bot
+    links:
+      - simple-ai-server
+
+volumes:
+  simple-ai-data:
