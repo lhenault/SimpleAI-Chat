@@ -35,7 +35,7 @@ def format_chat_log(chat_log: list[dict]):
     for message_pair in chat_log:
         formatted_chat_log.append({"role": "user", "content": message_pair.get("input")})
         formatted_chat_log.append({"role": "assistant", "content": message_pair.get("response")})
-    return chat_log
+    return formatted_chat_log
 
 
 @run_in_executor
