@@ -1,4 +1,5 @@
 import logging
+from typing import Any, Optional
 import time
 import asyncio
 
@@ -39,11 +40,18 @@ def format_chat_log(chat_log: list[dict]):
 
 
 @run_in_executor
-def get_response(message, history, summary=None):
+def get_response(
+    message: str, 
+    history: Optional[list[dict]] = None, 
+    summary: Optional[Any] = None,
+):
     logging.info(f"Input: {message}")
     logging.info(f"Context: {history}")
     
     start = time.time()
+    
+    if history is None:
+        history = []
     
     messages = format_chat_log(
         chat_log=history
